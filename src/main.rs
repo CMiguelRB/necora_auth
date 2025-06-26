@@ -1,7 +1,7 @@
 mod auth;
 mod routes;
 
-use std::env;
+use std::{env, process};
 use dotenvy::dotenv;
 use routes::routes;
 
@@ -12,7 +12,10 @@ async fn main() {
     dotenv().ok();
     match env::var("ENCRYPTION_KEY") {
         Ok(_val) => println!("Enviroment variables loaded OK!"),
-        Err(e) => println!("Error {}", e)
+        Err(e) => {
+            println!("Error {}", e);
+            process::exit(1)
+        }
     }
     
     let app = routes();
