@@ -39,7 +39,7 @@ jobs:
         run: |
           TARGET=${{ matrix.target }}
           VERSION=${GITHUB_REF#refs/tags/}        
-          BINARY_NAME="${{ github.event.repository.name }}-${TARGET}-${VERSION}
+          BINARY_NAME="${{ github.event.repository.name }}-${TARGET}-${VERSION}"
           echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "TARGET=$TARGET" >> $GITHUB_ENV
