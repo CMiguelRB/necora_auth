@@ -24,7 +24,6 @@ jobs:
       matrix:
         target:
           - aarch64-unknown-linux-gnu
-          - x86_64-pc-windows-gnu
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -39,12 +38,8 @@ jobs:
       - name: Set version and binary name
         run: |
           TARGET=${{ matrix.target }}
-          VERSION=${GITHUB_REF#refs/tags/}
-          EXT=""
-          if [[ "$TARGET" == *"windows"* ]]; then
-            EXT=".exe"
-          fi
-          BINARY_NAME="${{ github.event.repository.name }}-${TARGET}-${VERSION}${EXT}"
+          VERSION=${GITHUB_REF#refs/tags/}        
+          BINARY_NAME="${{ github.event.repository.name }}-${TARGET}-${VERSION}
           echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "TARGET=$TARGET" >> $GITHUB_ENV
