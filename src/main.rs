@@ -1,7 +1,7 @@
 mod auth;
 mod routes;
 
-use std::{env, process};
+use std::{env, net::SocketAddr, process};
 use dotenvy::dotenv;
 use routes::routes;
 
@@ -18,17 +18,22 @@ async fn main() {
         }
     }
     
-    let app = routes();
+    let routes = routes();
 
     let mut port = env::var("PORT").unwrap_or_default();
     if port == "" {
-        port = "3000".to_string();
+        port = "3810".to_string();
     }
 
-    let addr: String = ["127.0.0.1",&port].join(":");
+    let mut hostname = env::var("HOSTNAME").unwrap_or_default();
+    if hostname == "" {
+        hostname = "127.0.0.1".to_string();
+    }
+
+    let addr: String = [hostname,port].join(":");
 
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
 
     println!("Auth server running at http://{}", &addr);
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, routes.into_make_service_with_connect_info::<SocketAddr>()).await.unwrap();
 }
