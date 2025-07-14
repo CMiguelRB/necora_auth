@@ -13,9 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-rust@v1
-        with:
-          rust-version: stable
+      - name: Set up Rust
+        run: rustup update stable
       - name: Run tests
         run: cargo test --verbose
 
@@ -30,9 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-rust@v1
-        with:
-          rust-version: stable
+      - name: Set up Rust
+        run: rustup update stable
       - name: Install target
         run: rustup target add ${{ matrix.target }}
 
