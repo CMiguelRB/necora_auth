@@ -29,10 +29,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Rust
+
+      - name: Install Rust stable
         run: rustup update stable
-      - name: Install target
-        run: rustup target add ${{ matrix.target }}
+
+      - name: Install cross
+        run: cargo install cross
 
       - name: Set version and binary name
         run: |
@@ -47,9 +49,9 @@ jobs:
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "TARGET=$TARGET" >> $GITHUB_ENV
 
-      - name: Build
+      - name: Build with cross
         run: |
-          cargo build --release --target $TARGET
+          cross build --release --target $TARGET
           cp target/$TARGET/release/${{ github.event.repository.name }}$EXT $BINARY_NAME
 
       - name: Upload Release
