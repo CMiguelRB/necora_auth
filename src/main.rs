@@ -1,5 +1,6 @@
 mod auth;
 mod routes;
+mod sec;
 
 use std::{env, net::SocketAddr, process};
 use dotenvy::dotenv;
