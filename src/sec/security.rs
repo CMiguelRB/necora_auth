@@ -2,12 +2,13 @@ use aes_gcm::{
     aead::{consts::U12, generic_array::GenericArray, Aead, OsRng}, AeadCore, Aes256Gcm, Key, KeyInit
 };
 use base64::{engine::general_purpose, Engine};
-use std::env;
 use std::io::Error;
+use crate::conf::config;
 
 pub fn encrypt(value: &str) -> Result<String, Error> {
-    let key = env::var("ENCRYPTION_KEY").unwrap();
-    let password_byte = key.as_str().as_bytes();
+    let config = config::settings();
+    let key: &String = &config.security.encryption_key;
+    let password_byte = key.as_bytes();
 
     let key: &Key<Aes256Gcm> = password_byte.into();
     let cipher = Aes256Gcm::new(&key);
@@ -24,9 +25,10 @@ pub fn encrypt(value: &str) -> Result<String, Error> {
     return Ok(encrypted);
 }
 
-pub fn decrypt(value: String) -> Result<String, Error> {
-    let key = env::var("ENCRYPTION_KEY").unwrap();
-    let password_byte = key.as_str().as_bytes();
+pub fn decrypt(value: &str) -> Result<String, Error> {
+    let config = config::settings();
+    let key: &String = &config.security.encryption_key;
+    let password_byte = key.as_bytes();
 
     let hash = general_purpose::STANDARD.decode(value).expect("invalid base64");
     
@@ -41,6 +43,7 @@ pub fn decrypt(value: String) -> Result<String, Error> {
     let cipher = Aes256Gcm::new(&key);
 
     let decrypted = cipher.decrypt(nonce, ciphertext).expect("decryption failed");
-    return Ok(String::from_utf8(decrypted).expect("invalid utf-8"))
-
+    let decrypted_string = String::from_utf8(decrypted).expect("invalid utf-8");
+    
+    return Ok(decrypted_string);
 }

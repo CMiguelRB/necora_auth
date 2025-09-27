@@ -691,6 +691,7 @@ dependencies = [
  "dotenvy",
  "http",
  "jsonwebtoken",
+ "once_cell",
  "serde",
  "serde_json",
  "thiserror 2.0.16",

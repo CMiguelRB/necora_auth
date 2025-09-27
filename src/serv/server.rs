@@ -1,16 +1,14 @@
-use std::{sync::Arc, time::Duration};
-
 use axum::{
     extract::Json,
+    http::StatusCode,
     response::IntoResponse,
     routing::{get, post},
     Router,
-    http::StatusCode
 };
 use serde::Deserialize;
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
+use crate::conf::config;
 use crate::sec::security;
-
 
 #[derive(Deserialize)]
 pub struct LoginInput {
@@ -65,31 +63,28 @@ async fn logout(Json(payload): Json<BothTokens>) -> impl IntoResponse {
 }
 
 pub fn routes() -> Router {
-    let governor_conf = Arc::new(
-        GovernorConfigBuilder::default()
-            .per_second(5)
-            .burst_size(5)
-            .finish()
-            .unwrap(),
-    );
+    let config = config::settings();
+    // Allow bursts with up to five requests per IP address
+    // and replenishes one element every two seconds
+    let governor_conf = GovernorConfigBuilder::default()
+        .per_second(config.server.rate_limit)
+        .burst_size(config.server.burst_size)
+        .finish()
+        .unwrap();
 
     let governor_limiter = governor_conf.limiter().clone();
-    let interval = Duration::from_secs(60);
+    let interval = config.server.period;
     // a separate background task to clean up
     std::thread::spawn(move || loop {
         std::thread::sleep(interval);
         governor_limiter.retain_recent();
     });
 
-    let layer = GovernorLayer {
-        config: governor_conf,
-    };
-
-    Router::new()
+    return Router::new()
         .route("/login", post(login))
         .route("/refresh", post(refresh))
         .route("/authorize", post(authorize))
         .route("/revoke", post(revoke))
         .route("/logout", post(logout))
-        .layer(layer)
+        .layer(GovernorLayer::new(governor_conf));
 }
