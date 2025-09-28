@@ -46,7 +46,7 @@ pub fn settings() -> &'static Config {
         // App
         let app = App {
             name: "necora_auth".to_string(),
-            version: "0.0.2".to_string(),
+            version: "0.0.3".to_string(),
         };
 
         // Server
