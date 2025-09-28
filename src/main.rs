@@ -1,11 +1,13 @@
 mod serv;
 mod sec;
 mod conf;
+mod db;
 
 use std::{env, net::SocketAddr, process};
 use dotenvy::dotenv;
 use conf::config;
 use serv::server;
+use db::database;
 
 #[tokio::main]
 async fn main() {
@@ -22,6 +24,10 @@ async fn main() {
     println!("Loading configuration...");
     let config = config::settings();
     println!("Configuration loaded OK!");
+
+    println!("Connecting to the database...");
+    database::init_db_pool().await;
+    println!("Database connection OK!");
     
     let routes = server::routes();
 
