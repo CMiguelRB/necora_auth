@@ -11,6 +11,16 @@ use db::database;
 
 #[tokio::main]
 async fn main() {
+    println!("                                                                                                                                
+                                                                                                                               88           
+                                                                                                                        ,d     88           
+                                                                                                                        88     88           
+            8b,dPPYba,    ,adPPYba,   ,adPPYba,   ,adPPYba,   8b,dPPYba,  ,adPPYYba,         ,adPPYYba,  88       88  MM88MMM  88,dPPYba,   
+            88P'   '\"8a  a8P_____88  a8\"     \"\"  a8\"     \"8a  88P'   \"Y8  \"\"     'Y8         \"\"     'Y8  88       88    88     88P'    \"8a  
+            88       88  8PP\"\"\"\"\"\"\"  8b          8b       d8  88          ,adPPPPP88         ,adPPPPP88  88       88    88     88       88  
+            88       88  \"8b,   ,aa  \"8a,   ,aa  \"8a,   ,a8\"  88          88,    ,88         88,    ,88  \"8a,   ,a88    88,    88       88  
+            88       88   '\"Ybbd8\"'   '\"Ybbd8\"'   '\"YbbdP\"'   88          '\"8bbdP\"Y8         '\"8bbdP\"Y8   '\"YbbdP'Y8    \"Y888  88       88\n");
+
     println!("Starting necora auth service...");
     println!("Loading environment variables...");
     dotenv().ok();
