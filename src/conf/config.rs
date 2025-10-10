@@ -2,7 +2,7 @@ use once_cell::sync::OnceCell;
 use core::time;
 use std::{env, fs, path::PathBuf, time::Duration};
 
-#[derive(Debug)]
+#[derive()]
 pub struct Config {
     pub app: App,
     pub server: Server,
@@ -10,13 +10,13 @@ pub struct Config {
     pub security: Security,
 }
 
-#[derive(Debug)]
+#[derive()]
 pub struct App {
     pub name: String,
     pub version: String,
 }
 
-#[derive(Debug)]
+#[derive()]
 pub struct Server {
     pub hostname: String,
     pub port: String,
@@ -25,7 +25,7 @@ pub struct Server {
     pub period: time::Duration
 }
 
-#[derive(Debug)]
+#[derive()]
 pub struct Database {
     pub hostname: String,
     pub port: String,
@@ -33,8 +33,6 @@ pub struct Database {
     pub password: String,
     pub name: String,
 }
-
-#[derive(Debug)]
 pub struct Security {
     pub encryption_key: String,
 }
